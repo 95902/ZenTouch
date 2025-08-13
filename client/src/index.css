@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(45, 33%, 96%);
+  --foreground: hsl(199, 18%, 20%);
+  --card: hsl(45, 33%, 96%);
+  --card-foreground: hsl(199, 18%, 20%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(199, 18%, 20%);
+  --primary: hsl(133, 11%, 55%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(264, 24%, 74%);
+  --secondary-foreground: hsl(199, 18%, 20%);
+  --muted: hsl(133, 11%, 95%);
+  --muted-foreground: hsl(199, 18%, 50%);
+  --accent: hsl(34, 57%, 71%);
+  --accent-foreground: hsl(199, 18%, 20%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(133, 11%, 85%);
+  --input: hsl(133, 11%, 93%);
+  --ring: hsl(133, 11%, 55%);
+  --chart-1: hsl(133, 11%, 55%);
+  --chart-2: hsl(264, 24%, 74%);
+  --chart-3: hsl(34, 57%, 71%);
+  --chart-4: hsl(45, 33%, 85%);
+  --chart-5: hsl(199, 18%, 60%);
+  --sage: hsl(133, 11%, 55%);
+  --lavender: hsl(264, 24%, 74%);
+  --cream: hsl(34, 57%, 71%);
+  --offwhite: hsl(45, 33%, 96%);
+  --charcoal: hsl(199, 18%, 20%);
+  --radius: 1rem;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.dark {
+  --background: hsl(199, 18%, 8%);
+  --foreground: hsl(45, 33%, 95%);
+  --card: hsl(199, 18%, 12%);
+  --card-foreground: hsl(45, 33%, 95%);
+  --popover: hsl(199, 18%, 8%);
+  --popover-foreground: hsl(45, 33%, 95%);
+  --primary: hsl(133, 11%, 45%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(264, 24%, 64%);
+  --secondary-foreground: hsl(45, 33%, 95%);
+  --muted: hsl(199, 18%, 15%);
+  --muted-foreground: hsl(45, 33%, 70%);
+  --accent: hsl(34, 57%, 61%);
+  --accent-foreground: hsl(199, 18%, 8%);
+  --destructive: hsl(0, 84%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(199, 18%, 20%);
+  --input: hsl(199, 18%, 16%);
+  --ring: hsl(133, 11%, 45%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .sage {
+    color: var(--sage);
+  }
+  
+  .bg-sage {
+    background-color: var(--sage);
+  }
+  
+  .text-sage {
+    color: var(--sage);
+  }
+  
+  .border-sage {
+    border-color: var(--sage);
+  }
+  
+  .hover\:bg-sage:hover {
+    background-color: var(--sage);
+  }
+  
+  .lavender {
+    color: var(--lavender);
+  }
+  
+  .bg-lavender {
+    background-color: var(--lavender);
+  }
+  
+  .cream {
+    color: var(--cream);
+  }
+  
+  .bg-cream {
+    background-color: var(--cream);
+  }
+  
+  .offwhite {
+    color: var(--offwhite);
+  }
+  
+  .bg-offwhite {
+    background-color: var(--offwhite);
+  }
+  
+  .charcoal {
+    color: var(--charcoal);
+  }
+  
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+  
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+.calendar-cell:hover {
+  background-color: var(--sage);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.calendar-cell.selected {
+  background-color: var(--lavender);
+  color: white;
+}
