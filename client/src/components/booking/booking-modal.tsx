@@ -46,6 +46,7 @@ export default function BookingModal({ isOpen, onClose, preselectedServiceId }: 
       phone: "",
       date: "",
       time: "",
+      duration: 60,
       comments: null,
     },
   });
@@ -195,6 +196,35 @@ export default function BookingModal({ isOpen, onClose, preselectedServiceId }: 
                               {service.name} ({service.price}€)
                             </SelectItem>
                           ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Durée</FormLabel>
+                      <Select 
+                        onValueChange={(value) => field.onChange(parseInt(value))} 
+                        defaultValue={field.value?.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger data-testid="duration-select">
+                            <SelectValue placeholder="Choisissez la durée" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="30" data-testid="duration-option-30">
+                            30 minutes
+                          </SelectItem>
+                          <SelectItem value="60" data-testid="duration-option-60">
+                            1 heure
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

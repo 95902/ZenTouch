@@ -47,8 +47,8 @@ export default function ServicesCarousel({ services, categories, onBook }: Servi
         </p>
       </div>
 
-      {/* Services Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="services-grid">
+      {/* Services Grid - Desktop */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="services-grid">
         {filteredServices.map((service) => (
           <ServiceCard 
             key={service.id} 
@@ -56,6 +56,37 @@ export default function ServicesCarousel({ services, categories, onBook }: Servi
             onBook={onBook}
           />
         ))}
+      </div>
+
+      {/* Services Carousel - Mobile */}
+      <div className="md:hidden" data-testid="services-carousel-mobile">
+        <div className="flex flex-col space-y-6 max-h-[70vh] overflow-y-auto snap-y snap-mandatory scrollbar-hide">
+          {filteredServices.map((service, index) => (
+            <div
+              key={service.id}
+              className="snap-center flex-shrink-0 px-2"
+              data-testid={`mobile-service-${service.id}`}
+            >
+              <ServiceCard 
+                service={service} 
+                onBook={onBook}
+              />
+            </div>
+          ))}
+        </div>
+        
+        {/* Mobile scroll indicator */}
+        {filteredServices.length > 1 && (
+          <div className="flex justify-center mt-4 space-x-2">
+            {filteredServices.map((_, index) => (
+              <div
+                key={index}
+                className="w-2 h-2 rounded-full bg-sage/30"
+                data-testid={`mobile-indicator-${index}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

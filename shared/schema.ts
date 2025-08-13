@@ -28,6 +28,7 @@ export const appointments = pgTable("appointments", {
   phone: text("phone").notNull(),
   date: text("date").notNull(), // YYYY-MM-DD format
   time: text("time").notNull(), // HH:MM format
+  duration: integer("duration").notNull().default(60), // 30 or 60 minutes
   comments: text("comments"),
   status: text("status").notNull().default("confirmed"), // confirmed, cancelled
   createdAt: timestamp("created_at").defaultNow(),
