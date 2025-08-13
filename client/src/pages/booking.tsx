@@ -39,7 +39,7 @@ export default function Booking() {
       phone: "",
       date: "",
       time: "",
-      comments: "",
+      comments: null,
     },
   });
 
@@ -283,6 +283,7 @@ export default function Booking() {
                               placeholder="Précisions, allergies, préférences..."
                               className="h-20 resize-none"
                               {...field}
+                              value={field.value || ""}
                               data-testid="textarea-booking-comments"
                             />
                           </FormControl>

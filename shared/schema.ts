@@ -16,6 +16,7 @@ export const services = pgTable("services", {
   duration: integer("duration").notNull(), // in minutes
   price: integer("price").notNull(), // in euros
   image: text("image").notNull(),
+  category: text("category").notNull(), // "relaxation", "therapeutic", "specialty"
 });
 
 export const appointments = pgTable("appointments", {

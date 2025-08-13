@@ -1,52 +1,62 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Header() {
-  const [location] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   const navigation = [
-    { name: "Accueil", href: "/" },
-    { name: "Prestations", href: "/services" },
-    { name: "À propos", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    { name: "Accueil", href: "accueil" },
+    { name: "Prestations", href: "prestations" },
+    { name: "À propos", href: "a-propos" },
+    { name: "Contact", href: "contact" },
   ];
 
-  const isActive = (href: string) => {
-    if (href === "/" && location === "/") return true;
-    if (href !== "/" && location.startsWith(href)) return true;
-    return false;
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
+  const handleBooking = () => {
+    // This will be handled by the parent component that manages booking modal state
+    const event = new CustomEvent('openBooking');
+    window.dispatchEvent(event);
+    setIsMenuOpen(false);
   };
 
   return (
     <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-sage/10">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <Link href="/" className="text-xl font-semibold text-sage" data-testid="logo-link">
+          <button 
+            onClick={() => scrollToSection('accueil')}
+            className="text-xl font-semibold text-sage hover:text-sage/80 transition-colors" 
+            data-testid="logo-button"
+          >
             Marie Dubois
-          </Link>
+          </button>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8 items-center">
             {navigation.map((item) => (
-              <Link
+              <button
                 key={item.name}
-                href={item.href}
-                className={`transition-colors ${
-                  isActive(item.href) ? "text-sage" : "hover:text-sage"
-                }`}
+                onClick={() => scrollToSection(item.href)}
+                className="transition-colors hover:text-sage text-charcoal"
                 data-testid={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 {item.name}
-              </Link>
+              </button>
             ))}
-            <Link href="/booking" data-testid="button-booking">
-              <Button className="bg-sage text-white hover:bg-sage/90 rounded-full px-6">
-                Réserver
-              </Button>
-            </Link>
+            <Button 
+              onClick={handleBooking}
+              className="bg-sage text-white hover:bg-sage/90 rounded-full px-6"
+              data-testid="button-booking"
+            >
+              Réserver
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -64,23 +74,22 @@ export default function Header() {
           <div className="md:hidden py-4 border-t border-sage/10">
             <div className="flex flex-col space-y-4">
               {navigation.map((item) => (
-                <Link
+                <button
                   key={item.name}
-                  href={item.href}
-                  className={`transition-colors ${
-                    isActive(item.href) ? "text-sage" : "hover:text-sage"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => scrollToSection(item.href)}
+                  className="transition-colors hover:text-sage text-charcoal text-left"
                   data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.name}
-                </Link>
+                </button>
               ))}
-              <Link href="/booking" onClick={() => setIsMenuOpen(false)} data-testid="mobile-button-booking">
-                <Button className="bg-sage text-white hover:bg-sage/90 rounded-full w-full">
-                  Réserver
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleBooking}
+                className="bg-sage text-white hover:bg-sage/90 rounded-full w-full"
+                data-testid="mobile-button-booking"
+              >
+                Réserver
+              </Button>
             </div>
           </div>
         )}
