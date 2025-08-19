@@ -40,76 +40,68 @@ export class MemStorage implements IStorage {
     const defaultServices: InsertService[] = [
       // Relaxation Category
       {
-        name: "Massage Relaxant",
-        description: "Un moment de pure détente pour relâcher les tensions du quotidien. Techniques douces et huiles essentielles apaisantes.",
+        name: "Chi Nei Tsang",
+        description: "Technique ancestrale chinoise de massage abdominal pour libérer les émotions et harmoniser l'énergie vitale. Favorise la digestion et l'équilibre intérieur.",
         duration: 60,
-        price: 75,
+        price: 85,
         image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "relaxation"
       },
       {
-        name: "Massage Aromathérapie",
-        description: "Les bienfaits des huiles essentielles au service de votre bien-être. Un voyage sensoriel pour corps et esprit.",
-        duration: 75,
-        price: 90,
+        name: "Massage du Visage",
+        description: "Soin du visage relaxant et anti-âge. Techniques douces pour détendre les muscles faciaux, améliorer la circulation et favoriser la régénération cellulaire.",
+        duration: 45,
+        price: 65,
         image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "relaxation"
       },
       {
-        name: "Massage aux Pierres Chaudes",
-        description: "L'alliance parfaite entre chaleur et massage. Les pierres chaudes détendent profondément muscles et esprit.",
-        duration: 90,
-        price: 110,
+        name: "La Trame",
+        description: "Technique douce de libération des mémoires corporelles et émotionnelles. Harmonise la structure du corps et libère les blocages énergétiques profonds.",
+        duration: 75,
+        price: 95,
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "relaxation"
       },
-      // Therapeutic Category
+      // Thai Category
       {
-        name: "Massage Thérapeutique",
-        description: "Ciblé sur les zones de tension chroniques. Techniques de deep tissue pour soulager durablement douleurs et contractures.",
-        duration: 75,
-        price: 95,
-        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
-        category: "therapeutic"
-      },
-      {
-        name: "Massage Sportif",
-        description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire et prévient les blessures.",
-        duration: 60,
-        price: 85,
-        image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
-        category: "therapeutic"
-      },
-      {
-        name: "Massage Deep Tissue",
-        description: "Pression profonde pour traiter les tensions musculaires chroniques et améliorer la mobilité.",
+        name: "Massage Thaï Traditionnel",
+        description: "Technique ancestrale thaïlandaise combinant acupression, étirements et mobilisations articulaires. Libère les tensions et améliore la flexibilité.",
         duration: 90,
-        price: 105,
-        image: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
-        category: "therapeutic"
+        price: 100,
+        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+        category: "thai"
+      },
+      {
+        name: "Thaï Foot Massage",
+        description: "Massage des pieds et jambes selon la tradition thaïlandaise. Stimule les points réflexes et améliore la circulation sanguine et lymphatique.",
+        duration: 60,
+        price: 75,
+        image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+        category: "thai"
       },
       // Specialty Category
       {
-        name: "Massage Prénatal",
-        description: "Spécialement conçu pour les futures mamans. Soulage les maux de grossesse dans le respect total de votre état.",
+        name: "Drainage Lymphatique",
+        description: "Technique douce de stimulation du système lymphatique pour éliminer les toxines, réduire la rétention d'eau et stimuler l'immunité.",
         duration: 60,
-        price: 80,
+        price: 85,
         image: "https://images.unsplash.com/photo-1583416750470-965b2707b355?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "specialty"
       },
       {
-        name: "Réflexologie Plantaire",
-        description: "Stimulation des points réflexes du pied pour harmoniser l'ensemble de l'organisme. Technique ancestrale aux bienfaits prouvés.",
-        duration: 45,
-        price: 65,
+        name: "Massage Sportif",
+        description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire, prévient les blessures et améliore les performances.",
+        duration: 75,
+        price: 90,
         image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "specialty"
       },
       {
-        name: "Massage Ayurvédique",
-        description: "Massage traditionnel indien aux huiles chaudes pour équilibrer corps, esprit et âme selon les doshas.",
-        duration: 90,
-        price: 115,
+        name: "Tête Coup Épaule",
+        description: "Massage ciblé sur la nuque, les épaules et le haut du dos pour soulager les tensions liées au stress et à la posture. Idéal pour les personnes travaillant sur écran.",
+        duration: 45,
+        price: 70,
         image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
         category: "specialty"
       }

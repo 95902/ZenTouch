@@ -17,7 +17,7 @@ export default function About() {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=800" 
-                alt="Marie Dubois, masseuse certifiée" 
+                alt="Christine Do-Duc, masseuse certifiée" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
                 data-testid="img-about-marie"
               />

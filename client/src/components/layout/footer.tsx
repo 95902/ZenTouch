@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-medium mb-4" data-testid="text-footer-title">Marie Dubois</h3>
+            <h3 className="text-xl font-medium mb-4" data-testid="text-footer-title">Christine Do-Duc</h3>
             <p className="text-white/70 leading-relaxed" data-testid="text-footer-description">
               Masseuse professionnelle certifiée, spécialisée dans le bien-être et la relaxation. 
               Votre équilibre est ma priorité.
@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-white/10 mt-8 pt-8 text-center text-white/60">
-          <p data-testid="text-copyright">&copy; 2024 Marie Dubois - Masseuse Professionnelle. Tous droits réservés.</p>
+          <p data-testid="text-copyright">&copy; 2024 Christine Do-Duc - Masseuse Professionnelle. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

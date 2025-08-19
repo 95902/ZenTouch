@@ -1,6 +1,6 @@
 # Overview
 
-This is a French massage therapist business website (Marie Dubois) built as a full-stack web application. The application allows clients to view massage services, book appointments, and contact the therapist. It features a professional, calming design with a sage green and cream color palette that reflects the wellness industry aesthetic.
+This is a French massage therapist business website (Christine Do-Duc) built as a full-stack web application. The application allows clients to view massage services, book appointments, and contact the therapist. It features a professional, calming design with a sage green and cream color palette that reflects the wellness industry aesthetic.
 
 # User Preferences
 

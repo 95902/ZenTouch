@@ -25,21 +25,21 @@ export default function Home() {
   });
 
   const categories = [
-    {
-      id: "relaxation",
-      name: "Relaxation",
-      description: "Massages doux et apaisants pour une détente profonde et la libération du stress quotidien."
-    },
-    {
-      id: "therapeutic", 
-      name: "Thérapeutique",
-      description: "Soins spécialisés pour soulager les douleurs, tensions chroniques et améliorer la mobilité."
-    },
-    {
-      id: "specialty",
-      name: "Spécialisés",
-      description: "Techniques traditionnelles et adaptées aux besoins spécifiques de chaque client."
-    }
+          {
+        id: "relaxation",
+        name: "Relaxation",
+        description: "Chi Nei Tsang, massage du visage et la trame - techniques douces pour l'équilibre intérieur et la beauté naturelle."
+      },
+          {
+        id: "thai", 
+        name: "Thaï",
+        description: "Massage Thaï Traditionnel et Thaï Foot Massage - techniques ancestrales pour la flexibilité et la circulation."
+      },
+          {
+        id: "specialty",
+        name: "Spécialisés",
+        description: "Drainage lymphatique, massage sportif et tête coup épaule - soins ciblés pour des besoins spécifiques."
+      }
   ];
 
   const certifications = [
@@ -163,8 +163,8 @@ export default function Home() {
           </div>
           <div className="animate-slide-up">
             <img 
-              src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
-              alt="Marie Dubois, masseuse professionnelle" 
+              src="/src/images/photo christine hedaer2.jpg" 
+              alt="Christine Do-Duc, masseuse professionnelle" 
               className="rounded-2xl shadow-2xl w-full h-auto"
               data-testid="hero-image"
             />
@@ -219,7 +219,7 @@ export default function Home() {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=800" 
-                alt="Marie Dubois, masseuse certifiée" 
+                alt="Christine Do-Duc, masseuse certifiée" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
                 data-testid="about-image"
               />
