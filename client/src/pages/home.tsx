@@ -239,7 +239,7 @@ export default function Home() {
           </div>
           <div className="animate-slide-up">
             <img 
-              src="/src/images/photo christine hedaer2.JPG" 
+                              src="/images/photo christine hedaer2.JPG" 
               alt="Christine Do-Duc, masseuse professionnelle" 
               className="rounded-2xl shadow-2xl w-full h-auto"
               data-testid="hero-image"
