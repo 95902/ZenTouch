@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "esbuild index.ts --platform=node --packages=external --bundle --format=esm --outdir=.",
-    "build:simple": "tsc index.ts --outDir . --target es2020 --module es2020 --moduleResolution node",
+    "build": "esbuild index.prod.ts --platform=node --packages=external --bundle --format=esm --outdir=.",
+    "build:simple": "tsc index.prod.ts --outDir . --target es2020 --module es2020 --moduleResolution node",
     "dev": "tsx index.ts"
   },
   "dependencies": {
