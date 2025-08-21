@@ -101,21 +101,21 @@ export default function Home() {
   const servicesLoading = false;
 
   const categories = [
-          {
-        id: "relaxation",
-        name: "Relaxation",
+    {
+      id: "relaxation",
+      name: "Relaxation",
         description: "Chi Nei Tsang, massage du visage et la trame - techniques douces pour l'équilibre intérieur et la beauté naturelle."
       },
           {
         id: "thai", 
         name: "Thaï",
         description: "Massage Thaï Traditionnel et Thaï Foot Massage - techniques ancestrales pour la flexibilité et la circulation."
-      },
-          {
-        id: "specialty",
-        name: "Spécialisés",
+    },
+    {
+      id: "specialty",
+      name: "Spécialisés",
         description: "Drainage lymphatique, massage sportif et tête coup épaule - soins ciblés pour des besoins spécifiques."
-      }
+    }
   ];
 
   const certifications = [
