@@ -20,9 +20,85 @@ export default function Home() {
   const [selectedServiceId, setSelectedServiceId] = useState<string>();
   const { toast } = useToast();
 
-  const { data: services, isLoading: servicesLoading } = useQuery<Service[]>({
-    queryKey: ["/api/services"],
-  });
+  // Données de services statiques pour le développement
+  const staticServices: Service[] = [
+    {
+      id: "1",
+      name: "Chi Nei Tsang",
+      description: "Technique ancestrale chinoise de massage abdominal pour libérer les émotions et harmoniser l'énergie vitale.",
+      duration: 60,
+      price: 85,
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "relaxation"
+    },
+    {
+      id: "2",
+      name: "Massage du Visage",
+      description: "Soin du visage relaxant et anti-âge. Techniques douces pour détendre les muscles faciaux.",
+      duration: 45,
+      price: 65,
+      image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "relaxation"
+    },
+    {
+      id: "3",
+      name: "La Trame",
+      description: "Technique douce de libération des mémoires corporelles et émotionnelles.",
+      duration: 75,
+      price: 95,
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "relaxation"
+    },
+    {
+      id: "4",
+      name: "Massage Thaï Traditionnel",
+      description: "Technique ancestrale thaïlandaise combinant acupression, étirements et mobilisations articulaires.",
+      duration: 90,
+      price: 100,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "thai"
+    },
+    {
+      id: "5",
+      name: "Thaï Foot Massage",
+      description: "Massage des pieds et jambes selon la tradition thaïlandaise.",
+      duration: 60,
+      price: 75,
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "thai"
+    },
+    {
+      id: "6",
+      name: "Drainage Lymphatique",
+      description: "Technique douce de stimulation du système lymphatique pour éliminer les toxines.",
+      duration: 60,
+      price: 85,
+      image: "https://images.unsplash.com/photo-1583416750470-965b2707b355?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "specialty"
+    },
+    {
+      id: "7",
+      name: "Massage Sportif",
+      description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.",
+      duration: 75,
+      price: 90,
+      image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "specialty"
+    },
+    {
+      id: "8",
+      name: "Tête Coup Épaule",
+      description: "Massage ciblé sur la nuque, les épaules et le haut du dos pour soulager les tensions.",
+      duration: 45,
+      price: 70,
+      image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+      category: "specialty"
+    }
+  ];
+
+  // Utiliser les services statiques au lieu de l'API pour le moment
+  const services = staticServices;
+  const servicesLoading = false;
 
   const categories = [
           {
@@ -163,7 +239,7 @@ export default function Home() {
           </div>
           <div className="animate-slide-up">
             <img 
-              src="/src/images/photo christine hedaer2.jpg" 
+              src="/src/images/photo christine hedaer2.JPG" 
               alt="Christine Do-Duc, masseuse professionnelle" 
               className="rounded-2xl shadow-2xl w-full h-auto"
               data-testid="hero-image"
