@@ -1,0 +1,16 @@
+[build]
+  publish = "client/dist"
+  command = "cd client && npm install && npm run build:frontend"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "cd client && npm run dev"
+  port = 5000
+  publish = "client/dist"
