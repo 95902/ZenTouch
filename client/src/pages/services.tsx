@@ -14,7 +14,7 @@ export default function Services() {
       duration: 60,
       price: 85,
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
-      category: "relaxation"
+      category: "thai"
     },
     {
       id: "2",
@@ -64,7 +64,7 @@ export default function Services() {
     {
       id: "7",
       name: "Massage Sportif",
-      description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.",
+      description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.",
       duration: 75,
       price: 90,
       image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",

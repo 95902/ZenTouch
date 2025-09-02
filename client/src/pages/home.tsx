@@ -29,7 +29,7 @@ export default function Home() {
       duration: 60,
       price: 85,
       image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
-      category: "relaxation"
+      category: "thai"
     },
     {
       id: "2",
@@ -79,7 +79,7 @@ export default function Home() {
     {
       id: "7",
       name: "Massage Sportif",
-      description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.",
+      description: "Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.Spécialisé pour les athlètes et sportifs. Optimise la récupération musculaire.",
       duration: 75,
       price: 90,
       image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
@@ -104,7 +104,7 @@ export default function Home() {
     {
       id: "relaxation",
       name: "Relaxation",
-        description: "Chi Nei Tsang, massage du visage et la trame - techniques douces pour l'équilibre intérieur et la beauté naturelle."
+        description: ""
       },
           {
         id: "thai", 
@@ -217,17 +217,10 @@ export default function Home() {
               Retrouvez votre <span className="text-sage font-medium">équilibre</span> intérieur
             </h1>
             <p className="text-lg text-charcoal/70 mb-8 leading-relaxed" data-testid="hero-description">
-              Masseuse professionnelle certifiée, je vous accompagne dans votre quête de bien-être à travers des massages personnalisés dans un cadre apaisant.
+              Masseuse certifiée, je vous accompagne dans votre quête de bien-être à travers des massages personnalisés dans un cadre apaisant.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                onClick={() => setIsBookingOpen(true)}
-                className="bg-sage text-white px-8 py-4 rounded-full hover:bg-sage/90 transition-all duration-300 transform hover:scale-105"
-                data-testid="hero-book-button"
-              >
-                Prendre rendez-vous
-              </Button>
-              <Button 
+            <Button 
                 variant="outline" 
                 onClick={() => scrollToSection('prestations')}
                 className="border-sage text-sage px-8 py-4 rounded-full hover:bg-sage hover:text-white transition-all duration-300"
@@ -235,12 +228,20 @@ export default function Home() {
               >
                 Découvrir mes prestations
               </Button>
+              <Button 
+                onClick={() => setIsBookingOpen(true)}
+                className="bg-sage text-white px-8 py-4 rounded-full hover:bg-sage/90 transition-all duration-300 transform hover:scale-105"
+                data-testid="hero-book-button"
+              >
+                Prendre rendez-vous
+              </Button>
+             
             </div>
           </div>
           <div className="animate-slide-up">
             <img 
                               src="/images/photo christine hedaer2.JPG" 
-              alt="Christine Do-Duc, masseuse professionnelle" 
+              alt="Wat su harmonie, masseuse professionnelle" 
               className="rounded-2xl shadow-2xl w-full h-auto"
               data-testid="hero-image"
             />
@@ -256,7 +257,7 @@ export default function Home() {
               Mes Prestations
             </h2>
             <p className="text-lg text-charcoal/70 max-w-2xl mx-auto" data-testid="services-description">
-              Chaque massage est adapté à vos besoins spécifiques pour une expérience unique de détente et de régénération.
+              Chaque massage est adapté à vos besoins spécifiques <br /> pour une expérience unique de détente et de régénération.
             </p>
           </div>
           
@@ -276,15 +277,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="text-center mt-12">
-            <Button 
-              onClick={() => setIsBookingOpen(true)}
-              className="bg-sage text-white px-8 py-4 rounded-full hover:bg-sage/90 transform hover:scale-105 transition-all duration-300"
-              data-testid="services-book-button"
-            >
-              Réserver maintenant
-            </Button>
-          </div>
+          
         </div>
       </section>
 
@@ -295,7 +288,7 @@ export default function Home() {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=800" 
-                alt="Christine Do-Duc, masseuse certifiée" 
+                alt="Wat su harmonie, masseuse certifiée" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
                 data-testid="about-image"
               />
@@ -376,6 +369,15 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="text-center mt-12">
+            <Button 
+              onClick={() => setIsBookingOpen(true)}
+              className="bg-sage text-white px-8 py-4 rounded-full hover:bg-sage/90 transform hover:scale-105 transition-all duration-300"
+              data-testid="services-book-button"
+            >
+              Réserver maintenant
+            </Button>
+          </div>
       </section>
 
       {/* Contact Section */}
