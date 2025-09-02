@@ -35,7 +35,7 @@ export default function Header() {
             className="text-xl font-semibold text-sage hover:text-sage/80 transition-colors" 
             data-testid="logo-button"
           >
-            Christine Do-Duc
+            Wat su harmonie
           </button>
           
           {/* Desktop Navigation */}
