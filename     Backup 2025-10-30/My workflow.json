@@ -1,0 +1,588 @@
+{
+  "updatedAt": "2025-10-29T20:38:29.924Z",
+  "createdAt": "2025-10-29T20:34:30.969Z",
+  "id": "1SPbHilxQXYvz3KQ",
+  "name": "My workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "booking-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "380f2d91-f98d-463f-a6d2-e927b36b7cb4",
+      "name": "Webhook - Toutes Actions",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        192
+      ],
+      "webhookId": "booking-webhook-main"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "CREATED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0d9c31be-52ee-4068-9c97-41459ea5e5a1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "UPDATED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "45ff8688-ecf3-40a9-a0a2-562965329491"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "CANCELLED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "179b1ae3-fe0f-4a5c-b3a2-36295a41a958"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7e1b90a3-414a-4777-86f5-3dda74504c6b",
+      "name": "Router - Type d'Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -208,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nreturn { json: { ...body, action: 'CREATED' } };"
+      },
+      "id": "41abf924-4399-4034-995c-8852a7d45a50",
+      "name": "Format - Création",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nreturn { json: { ...body, action: 'UPDATED' } };"
+      },
+      "id": "d2d1d6a6-2764-458e-834d-00a04f5d12c0",
+      "name": "Format - Modification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nreturn { json: { ...body, action: 'CANCELLED' } };"
+      },
+      "id": "5885a04c-afdd-4b97-b514-4ffc8947b1bf",
+      "name": "Format - Suppression",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "802cd6db09d67223ec8913a8d9b9523c22548e466cb00f9a0aee0b0b7560e6a9@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Voyage"
+        },
+        "start": "={{ $json.calendarStartDateTime }}",
+        "end": "={{ $json.calendarEndDateTime }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $json.customerEmail }}"
+          ],
+          "description": "=📋 Détails de la réservation\n\nClient : {{ $json.customerName }}\nEmail : {{ $json.customerEmail }}\nTéléphone : {{ $json.customerPhone }}\n\nSession :\n- Type : {{ $json.type }}\n- Date : {{ $json.formattedDate }}\n- Horaire : {{ $json.timeSlots }}\n- Durée : {{ $json.duration }} minutes\n- Prix : {{ $json.price }}€\n\nCoach : {{ $json.coachName }}\nLieu : {{ $json.location }}\nAdresse : {{ $json.locationAddress }}\n\nNiveau : {{ $json.level }}\nObjectifs : {{ $json.goals }}\n\nRéservation #{{ $json.bookingId }}",
+          "guestsCanModify": false,
+          "location": "={{ $json.locationAddress }}",
+          "sendUpdates": "all",
+          "summary": "=🏌️ {{ $json.type }} - {{ $json.customerName }}"
+        }
+      },
+      "id": "8fc46658-f16b-498e-b63e-dc32d1b622e8",
+      "name": "Créer Événement Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "802cd6db09d67223ec8913a8d9b9523c22548e466cb00f9a0aee0b0b7560e6a9@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Voyage"
+        },
+        "eventId": "={{ $json.calendarEventId }}",
+        "updateFields": {
+          "description": "=📋 Détails de la réservation (MODIFIÉE)\n\nClient : {{ $json.customerName }}\nEmail : {{ $json.customerEmail }}\nTéléphone : {{ $json.customerPhone }}\n\nSession :\n- Type : {{ $json.type }}\n- Date : {{ $json.formattedDate }}\n- Horaire : {{ $json.timeSlots }}\n- Durée : {{ $json.duration }} minutes\n- Prix : {{ $json.price }}€\n\nCoach : {{ $json.coachName }}\nLieu : {{ $json.location }}\nAdresse : {{ $json.locationAddress }}\n\nNiveau : {{ $json.level }}\nObjectifs : {{ $json.goals }}\n\n⚠️ Modifié le {{ new Date().toLocaleString('fr-FR') }}\n\nRéservation #{{ $json.bookingId }}",
+          "end": "={{ $json.calendarEndDateTime }}",
+          "location": "={{ $json.locationAddress }}",
+          "sendUpdates": "all",
+          "start": "={{ $json.calendarStartDateTime }}",
+          "summary": "=🏌️ {{ $json.type }} - {{ $json.customerName }}"
+        }
+      },
+      "id": "e8f489a9-6b7c-46fa-9075-3fdef49a7b5d",
+      "name": "Modifier Événement Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "802cd6db09d67223ec8913a8d9b9523c22548e466cb00f9a0aee0b0b7560e6a9@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Voyage"
+        },
+        "eventId": "={{ $json.calendarEventId }}",
+        "options": {
+          "sendUpdates": "all"
+        }
+      },
+      "id": "d5474b00-0f46-49c0-b2fd-db7bca008f46",
+      "name": "Supprimer Événement Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge les données Calendar avec les données formatées\nconst calendarData = $input.first().json;\nconst formatData = $node['Format - Création'].json;\n\nreturn {\n  json: {\n    ...formatData,\n    calendarEventId: calendarData.id,\n    action: 'CREATED'\n  }\n};"
+      },
+      "id": "95ab43d9-d4f5-4f41-a584-ae42f8b947e4",
+      "name": "Merge Data - Création",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge les données Calendar avec les données formatées\nconst calendarData = $input.first().json;\nconst formatData = $node['Format - Modification'].json;\n\nreturn {\n  json: {\n    ...formatData,\n    calendarEventId: calendarData.id || formatData.calendarEventId,\n    action: 'UPDATED'\n  }\n};"
+      },
+      "id": "924e0ec1-66d9-4495-a5f9-5b288e93e435",
+      "name": "Merge Data - Modification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pour la suppression, on garde juste les données formatées\nconst formatData = $node['Format - Suppression'].json;\n\nreturn {\n  json: {\n    ...formatData,\n    action: 'CANCELLED',\n    deleted: true\n  }\n};"
+      },
+      "id": "2ba1ddc2-22b8-4e6e-8b4b-dd75b8ca3b82",
+      "name": "Merge Data - Suppression",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=✅ Confirmation de votre réservation - {{ $json.coachName }}",
+        "message": "=<!DOCTYPE html>\\n<html>\\n<head>\\n  <meta charset=\\\"UTF-8\\\">\\n  <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\">\\n  <style>\\n    body {\\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\\n      line-height: 1.6;\\n      color: #333;\\n      margin: 0;\\n      padding: 0;\\n      background-color: #f4f4f4;\\n    }\\n    .container {\\n      max-width: 600px;\\n      margin: 20px auto;\\n      background: white;\\n      border-radius: 12px;\\n      overflow: hidden;\\n      box-shadow: 0 4px 6px rgba(0,0,0,0.1);\\n    }\\n    .header {\\n      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);\\n      color: white;\\n      padding: 40px 30px;\\n      text-align: center;\\n    }\\n    .header h1 {\\n      margin: 0;\\n      font-size: 28px;\\n      font-weight: 600;\\n    }\\n    .header .icon {\\n      font-size: 48px;\\n      margin-bottom: 10px;\\n    }\\n    .content {\\n      padding: 40px 30px;\\n    }\\n    .greeting {\\n      font-size: 18px;\\n      margin-bottom: 20px;\\n      color: #1e3a8a;\\n    }\\n    .details-box {\\n      background: #f8fafc;\\n      border-left: 4px solid #3b82f6;\\n      padding: 25px;\\n      margin: 25px 0;\\n      border-radius: 8px;\\n    }\\n    .details-box h3 {\\n      margin: 0 0 20px 0;\\n      color: #1e3a8a;\\n      font-size: 20px;\\n    }\\n    .detail-row {\\n      display: flex;\\n      padding: 10px 0;\\n      border-bottom: 1px solid #e2e8f0;\\n    }\\n    .detail-row:last-child {\\n      border-bottom: none;\\n    }\\n    .detail-label {\\n      font-weight: 600;\\n      width: 140px;\\n      color: #64748b;\\n      flex-shrink: 0;\\n    }\\n    .detail-value {\\n      color: #0f172a;\\n      flex: 1;\\n    }\\n    .info-section {\\n      background: #fef3c7;\\n      border-left: 4px solid #f59e0b;\\n      padding: 20px;\\n      margin: 25px 0;\\n      border-radius: 8px;\\n    }\\n    .info-section h4 {\\n      margin: 0 0 15px 0;\\n      color: #92400e;\\n      font-size: 16px;\\n    }\\n    .info-section ul {\\n      margin: 0;\\n      padding-left: 20px;\\n    }\\n    .info-section li {\\n      margin: 8px 0;\\n      color: #78350f;\\n    }\\n    .button-container {\\n      text-align: center;\\n      margin: 30px 0;\\n    }\\n    .button {\\n      display: inline-block;\\n      padding: 14px 32px;\\n      background: #3b82f6;\\n      color: white;\\n      text-decoration: none;\\n      border-radius: 8px;\\n      font-weight: 600;\\n      font-size: 16px;\\n      transition: background 0.3s;\\n    }\\n    .button:hover {\\n      background: #2563eb;\\n    }\\n    .footer {\\n      background: #f8fafc;\\n      padding: 30px;\\n      text-align: center;\\n      border-top: 1px solid #e2e8f0;\\n    }\\n    .footer p {\\n      margin: 8px 0;\\n      color: #64748b;\\n      font-size: 14px;\\n    }\\n    .footer a {\\n      color: #3b82f6;\\n      text-decoration: none;\\n    }\\n    .divider {\\n      height: 1px;\\n      background: #e2e8f0;\\n      margin: 30px 0;\\n    }\\n  </style>\\n</head>\\n<body>\\n  <div class=\\\"container\\\">\\n    <div class=\\\"header\\\">\\n      <div class=\\\"icon\\\">🏌️</div>\\n      <h1>Réservation Confirmée !</h1>\\n    </div>\\n    \\n    <div class=\\\"content\\\">\\n      <p class=\\\"greeting\\\">Bonjour <strong>{{ $json.body.customerName }}</strong>,</p>\\n      \\n      <p>Nous sommes ravis de confirmer votre réservation de coaching golf ! Votre session est maintenant enregistrée dans notre système et dans le calendrier de votre coach.</p>\\n      \\n      <div class=\\\"details-box\\\">\\n        <h3>📋 Détails de votre session</h3>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">📅 Date</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.formattedDate }}</div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">⏰ Horaire</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.timeSlots }}</div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">⏱️ Durée</div>\\n          <div class=\\\"detail-value\\\"> {{ $json.body.duration }}minutes</div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">🏌️ Coach</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.coachName }}</div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">📍 Lieu</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.location }}<br><small style=\\\"color: #64748b;\\\">{{ $json.body.locationAddress }}</small></div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">🎯 Niveau</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.level }}</div>\\n        </div>\\n        \\n        <div class=\\\"detail-row\\\">\\n          <div class=\\\"detail-label\\\">🎓 Objectifs</div>\\n          <div class=\\\"detail-value\\\">{{ $json.body.goals }}</div>\\n        </div>\\n      </div>\\n      \\n      <div class=\\\"info-section\\\">\\n        <h4>📦 Ce qu'il faut apporter</h4>\\n        <ul>\\n          <li>Vos clubs de golf (ou location disponible sur place)</li>\\n          <li>Une tenue confortable adaptée à la pratique du golf</li>\\n          <li>Des chaussures de golf ou baskets propres</li>\\n          <li>Une bouteille d'eau</li>\\n          <li>Protection solaire (casquette, crème solaire)</li>\\n        </ul>\\n      </div>\\n      \\n      <div class=\\\"button-container\\\">\\n        <a href=\\\"https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ $json.body.type }}%20-%20{{ $json.body.customerName }}&dates={{ $json.body.calendarStartDateTime }}/{{ $json.body.calendarEndDateTime }}&details=Coaching%20avec%20{{ $json.body.coachName }}%0ANiveau:%20{{ $json.body.level }}&location={{ $json.body.locationAddress }}\\\" class=\\\"button\\\" target=\\\"_blank\\\">\\n          📅 Ajouter à mon calendrier\\n        </a>\\n      </div>\\n      \\n      <div class=\\\"divider\\\"></div>\\n      \\n      <p style=\\\"color: #64748b; font-size: 14px;\\\">\\n        📧 Un email de rappel vous sera envoyé <strong>24 heures avant</strong> votre session.<br>\\n        📱 Vous recevrez également un SMS de confirmation si vous avez fourni votre numéro.\\n      </p>\\n      \\n      <p style=\\\"margin-top: 30px;\\\">\\n        Nous avons hâte de vous accueillir sur le green ! 🏌️‍♂️\\n      </p>\\n      \\n      <p style=\\\"color: #64748b; margin-top: 20px;\\\">\\n        Sportivement,<br>\\n        <strong style=\\\"color: #1e3a8a;\\\">L'équipe {{ $json.body.coachName }}</strong>\\n      </p>\\n    </div>\\n    \\n    <div class=\\\"footer\\\">\\n      <p><strong>Golf Coach Reservation System</strong></p>\\n      <p>Pour toute question ou modification :</p>\\n      <p>\\n        📧 <a href=\\\"mailto:contact@golfcoach.com\\\">contact@golfcoach.com</a><br>\\n        📞 +33 1 23 45 67 89\\n      </p>\\n      <p style=\\\"margin-top: 20px; font-size: 12px; color: #94a3b8;\\\">\\n        Réservation #{{ $json.body.bookingId }}\\n      </p>\\n    </div>\\n  </div>\\n</body>\\n</html>",
+        "options": {}
+      },
+      "id": "56d0b921-1986-4b21-8b93-e0e4339fa685",
+      "name": "Email - Confirmation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        0
+      ],
+      "webhookId": "526e8fa2-50bb-4c50-8c7e-c7fb053599b4"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=📝 Modification de votre réservation - {{ $json.coachName }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }\n    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }\n    .header { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: white; padding: 40px 30px; text-align: center; }\n    .content { padding: 40px 30px; }\n    .details-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 25px; margin: 25px 0; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\"><div style=\"font-size: 48px;\">📝</div><h1>Réservation Modifiée</h1></div>\n    <div class=\"content\">\n      <p>Bonjour <strong>{{ $json.customerName }}</strong>,</p>\n      <p>Votre réservation a été modifiée avec succès.</p>\n      <div class=\"details-box\">\n        <strong>📅 {{ $json.formattedDate }}</strong><br>\n        <strong>⏰ {{ $json.timeSlots }}</strong><br>\n        🏌️ Coach: {{ $json.coachName }}<br>\n        📍 {{ $json.location }}\n      </div>\n      <p>À bientôt ! 🏌️‍♂️</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "31419a52-f675-4f52-97b5-68db105a39a2",
+      "name": "Email - Modification",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        192
+      ],
+      "webhookId": "438117c5-5bf7-48eb-b8b9-001e1ea3dde5"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=❌ Annulation de votre réservation - {{ $json.coachName }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }\n    .container { max-width: 600px; margin: 20px auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }\n    .header { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); color: white; padding: 40px 30px; text-align: center; }\n    .content { padding: 40px 30px; }\n    .details-box { background: #fee2e2; border-left: 4px solid #dc2626; padding: 25px; margin: 25px 0; border-radius: 8px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\"><div style=\"font-size: 48px;\">❌</div><h1>Réservation Annulée</h1></div>\n    <div class=\"content\">\n      <p>Bonjour <strong>{{ $json.customerName }}</strong>,</p>\n      <p>Votre réservation a été annulée.</p>\n      <div class=\"details-box\">\n        📅 {{ $json.formattedDate }}<br>\n        ⏰ {{ $json.timeSlots }}<br>\n        🏌️ Coach: {{ $json.coachName }}\n      </div>\n      <p>Nous espérons vous revoir bientôt ! 🏌️‍♂️</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "da196e12-75eb-4760-bd34-7ee4f65d65f9",
+      "name": "Email - Annulation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        368
+      ],
+      "webhookId": "8c6906c7-2cc0-4356-8ee2-6c19c8c499ba"
+    },
+    {
+      "parameters": {
+        "url": "https://golfcoachreservation-production.up.railway.app/api/n8n/webhook",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "local-n8n-api-key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{ $json.action === 'CREATED' ? 'BOOKING_CONFIRMED' : $json.action === 'UPDATED' ? 'BOOKING_UPDATED' : 'BOOKING_CANCELLED' }}"
+            },
+            {
+              "name": "bookingId",
+              "value": "={{ $json.bookingId }}"
+            },
+            {
+              "name": "calendarEventId",
+              "value": "={{ $json.calendarEventId }}"
+            },
+            {
+              "name": "emailSent",
+              "value": true
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "25d6d570-962e-422d-951c-832d8a5eaeb7",
+      "name": "Callback vers App",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        784,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"action\": \"{{ $json.action }}\",\n  \"bookingId\": \"{{ $json.bookingId }}\",\n  \"calendarEventId\": \"{{ $json.calendarEventId }}\",\n  \"emailSent\": true,\n  \"timestamp\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "713012c1-fa92-4234-955a-ec7f9e887388",
+      "name": "Réponse Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        192
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Toutes Actions": {
+      "main": [
+        [
+          {
+            "node": "Router - Type d'Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Type d'Action": {
+      "main": [
+        [
+          {
+            "node": "Format - Création",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format - Modification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format - Suppression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format - Création": {
+      "main": [
+        [
+          {
+            "node": "Créer Événement Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format - Modification": {
+      "main": [
+        [
+          {
+            "node": "Modifier Événement Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format - Suppression": {
+      "main": [
+        [
+          {
+            "node": "Supprimer Événement Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Événement Calendar": {
+      "main": [
+        [
+          {
+            "node": "Merge Data - Création",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modifier Événement Calendar": {
+      "main": [
+        [
+          {
+            "node": "Merge Data - Modification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supprimer Événement Calendar": {
+      "main": [
+        [
+          {
+            "node": "Merge Data - Suppression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data - Création": {
+      "main": [
+        [
+          {
+            "node": "Email - Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data - Modification": {
+      "main": [
+        [
+          {
+            "node": "Email - Modification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data - Suppression": {
+      "main": [
+        [
+          {
+            "node": "Email - Annulation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email - Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Callback vers App",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email - Modification": {
+      "main": [
+        [
+          {
+            "node": "Callback vers App",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email - Annulation": {
+      "main": [
+        [
+          {
+            "node": "Callback vers App",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Callback vers App": {
+      "main": [
+        [
+          {
+            "node": "Réponse Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "d1da912c-2c2c-4696-838f-5b4531e6fae2",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-10-29T20:34:30.969Z",
+      "createdAt": "2025-10-29T20:34:30.969Z",
+      "role": "workflow:owner",
+      "workflowId": "1SPbHilxQXYvz3KQ",
+      "projectId": "MNN6I3Aq8chOdsCX"
+    }
+  ],
+  "tags": []
+}
