@@ -1,0 +1,80 @@
+{
+  "updatedAt": "2025-10-30T21:26:24.161Z",
+  "createdAt": "2025-10-29T20:47:59.369Z",
+  "id": "MM65kTLwofV8qphW",
+  "name": "backupN8n",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "79522ff3-47b1-46f8-b2cf-76f7ffcb4f19",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "30a33e70-14c7-49bc-99ae-3c5cc4c5a32c",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "rFsLS82RGleyapUi",
+          "name": "n8n account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "d75436e1-c684-450d-a05b-302701d0a2c8",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-10-29T20:47:59.369Z",
+      "createdAt": "2025-10-29T20:47:59.369Z",
+      "role": "workflow:owner",
+      "workflowId": "MM65kTLwofV8qphW",
+      "projectId": "MNN6I3Aq8chOdsCX"
+    }
+  ],
+  "tags": []
+}
