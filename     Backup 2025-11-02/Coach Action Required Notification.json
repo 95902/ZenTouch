@@ -1,0 +1,104 @@
+{
+  "updatedAt": "2025-11-02T17:38:57.746Z",
+  "createdAt": "2025-11-02T17:30:51.785Z",
+  "id": "RDNoILYswnCWjTNi",
+  "name": "Coach Action Required Notification",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "coach-action-required",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "01597175-dd2c-4b6a-bb84-a714cb7fb05b",
+      "name": "Webhook",
+      "webhookId": "39f7cfe2-9c32-4c0f-95d7-75648f14a8eb"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Format-CREATED').item.json.customerEmail }}",
+        "subject": "=✅ Confirmation de votre réservation - {{ $('Format-CREATED').item.json.coachName }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }\n    .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n    .header { background-color: #f59e0b; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center; }\n    .content { background-color: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }\n    .booking-details { background-color: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b; }\n    .action-box { background-color: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #fbbf24; }\n    .button { display: inline-block; background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 10px; }\n    .footer { text-align: center; margin-top: 30px; color: #6b7280; font-size: 14px; padding-top: 20px; border-top: 1px solid #e5e7eb; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1 style=\"margin: 0;\">⚠️ Action Requise</h1>\n      <p style=\"margin: 10px 0 0 0;\">Nouvelle réservation de parcours accompagné</p>\n    </div>\n    \n    <div class=\"content\">\n      <h2 style=\"color: #374151; margin-top: 0;\">Bonjour,</h2>\n      \n      <p>Une nouvelle réservation de type <strong>parcours accompagné</strong> a été créée et nécessite votre intervention.</p>\n      \n      <div class=\"action-box\">\n        <h3 style=\"color: #92400e; margin-top: 0;\">📋 Action requise :</h3>\n        <p style=\"color: #92400e; font-weight: bold; margin: 0;\">\n          Veuillez ajouter une date de réservation pour ce client dans l'interface d'administration.\n        </p>\n      </div>\n      \n      <div class=\"booking-details\">\n        <h3 style=\"color: #374151; margin-top: 0;\">📝 Détails de la réservation</h3>\n        <p><strong>ID de réservation :</strong> {{ $json.body.bookingId }}</p>\n        <p><strong>Client :</strong> {{ $json.body.customerName }}</p>\n        <p><strong>Email :</strong> {{ $json.body.customerEmail }}</p>\n        <p><strong>Téléphone :</strong> {{ $json.body.customerPhone || 'Non renseigné' }}</p>\n        <p><strong>Niveau d'expérience :</strong> {{ $json.body.experienceLevel || 'Non renseigné' }}</p>\n        <p><strong>Nombre de joueurs :</strong> {{ $json.body.numberOfPlayers }}</p>\n        {{#if $json.body.duration}}\n        <p><strong>Durée souhaitée :</strong> {{ $json.body.duration }}</p>\n        {{/if}}\n        {{#if $json.body.message}}\n        <p><strong>Message du client :</strong><br><em>{{ $json.body.message }}</em></p>\n        {{/if}}\n      </div>\n      \n      <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"{{ $json.body.adminUrl }}\" class=\"button\">Accéder à l'interface d'administration</a>\n      </div>\n      \n      <p style=\"color: #6b7280; font-size: 14px;\">\n        <strong>Note :</strong> Une fois la date ajoutée, un email de confirmation sera automatiquement envoyé au client.\n      </p>\n    </div>\n    \n    <div class=\"footer\">\n      <p>Cet email a été envoyé automatiquement par le système GolfCoachReservation.</p>\n      <p>Ne pas répondre à cet email.</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "09ef8f6d-3c2c-4c2f-a1de-6f118a86bc69",
+      "name": "Email - Confirmation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        0
+      ],
+      "webhookId": "526e8fa2-50bb-4c50-8c7e-c7fb053599b4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mPfWOKq6INlbfygx",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nreturn { json: { ...body, action: 'CREATED' } };"
+      },
+      "id": "312c3a90-66bd-46f2-84e8-41ac203a1ce1",
+      "name": "Format-CREATED",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Format-CREATED": {
+      "main": [
+        [
+          {
+            "node": "Email - Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Format-CREATED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5fd5bc5c-8cd2-485e-b64d-6dd611b8bf67",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-02T17:30:51.785Z",
+      "createdAt": "2025-11-02T17:30:51.785Z",
+      "role": "workflow:owner",
+      "workflowId": "RDNoILYswnCWjTNi",
+      "projectId": "MNN6I3Aq8chOdsCX"
+    }
+  ],
+  "tags": []
+}
