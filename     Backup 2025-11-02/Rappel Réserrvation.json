@@ -1,0 +1,277 @@
+{
+  "updatedAt": "2025-11-02T19:35:10.993Z",
+  "createdAt": "2025-11-01T19:34:27.881Z",
+  "id": "ypvVcRdOiiQCjTp7",
+  "name": "Rappel Réserrvation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "6b444ac1-0b34-488b-a83b-92a884374324",
+      "name": "Vérifier toutes les 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -816,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://golfcoachreservation-production.up.railway.app/api/bookings/upcoming",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "local-n8n-api-key"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ef4c9a19-b9ef-4c4a-a9c0-45dfb38108ed",
+      "name": "Récupérer Réservations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -624,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filtrer les réservations qui ont lieu dans 24h (±30min)\nconst now = new Date();\nconst in24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);\nconst windowStart = new Date(in24Hours.getTime() - 30 * 60 * 1000); // -30min\nconst windowEnd = new Date(in24Hours.getTime() + 30 * 60 * 1000);   // +30min\n\nconst bookings = $input.first().json.bookings || [];\n\nconst bookingsToRemind = bookings.filter(booking => {\n  const bookingDate = new Date(booking.date);\n  \n  // Vérifier que c'est dans la fenêtre de 24h\n  const isIn24HWindow = bookingDate >= windowStart && bookingDate <= windowEnd;\n  \n  // Vérifier que le rappel n'a pas déjà été envoyé\n  const reminderNotSent = !booking.reminderSent;\n  \n  // Vérifier que la réservation n'est pas annulée\n  const isActive = booking.status !== 'CANCELLED';\n  \n  return isIn24HWindow && reminderNotSent && isActive;\n});\n\nconsole.log(`${bookingsToRemind.length} réservations nécessitent un rappel`);\n\n// Retourner chaque réservation comme un item séparé\nreturn bookingsToRemind.map(booking => ({ json: booking }));"
+      },
+      "id": "1aa287e1-fc90-4a2a-a0d4-814233657608",
+      "name": "Filtrer Réservations 24h",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -416,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              },
+              "id": "a3e564ac-b3b3-4dbc-a1fb-46887af30006"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "075d2660-76f1-4f15-b86a-3e88d5c5ba06",
+      "name": "A des réservations ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parser le timeSlot pour extraire l'heure de début\nconst booking = $input.first().json;\nconst timeSlot = booking.timeSlot; // \"14:00 - 15:30\"\nconst startTime = timeSlot.split(' - ')[0]; // \"14:00\"\n\n// Créer la date complète avec l'heure\nconst bookingDate = new Date(booking.date);\nconst [hours, minutes] = startTime.split(':').map(Number);\nbookingDate.setHours(hours, minutes, 0, 0);\n\n// Formater la date en français\nconst formattedDate = bookingDate.toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\n// Calculer le temps restant\nconst now = new Date();\nconst hoursUntil = Math.round((bookingDate - now) / (1000 * 60 * 60));\n\nreturn {\n  json: {\n    ...booking,\n    formattedDate,\n    startTime,\n    hoursUntil,\n    bookingDateTime: bookingDate.toISOString()\n  }\n};"
+      },
+      "id": "df0637c6-29f2-415d-aad0-0c69b17b362a",
+      "name": "Formater Données Rappel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.customerEmail }}",
+        "subject": "=⏰ Rappel : Votre session de golf demain - {{ $json.coachName || 'Coach Golf Pro' }}",
+        "message": "=<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <style>\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      line-height: 1.6;\n      color: #333;\n      margin: 0;\n      padding: 0;\n      background-color: #f4f4f4;\n    }\n    .container {\n      max-width: 600px;\n      margin: 20px auto;\n      background: white;\n      border-radius: 12px;\n      overflow: hidden;\n      box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n    }\n    .header {\n      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);\n      color: white;\n      padding: 40px 30px;\n      text-align: center;\n    }\n    .header h1 {\n      margin: 0;\n      font-size: 28px;\n      font-weight: 600;\n    }\n    .header .icon {\n      font-size: 48px;\n      margin-bottom: 10px;\n    }\n    .content {\n      padding: 40px 30px;\n    }\n    .countdown-box {\n      background: #fef3c7;\n      border: 2px solid #f59e0b;\n      padding: 25px;\n      margin: 25px 0;\n      border-radius: 12px;\n      text-align: center;\n    }\n    .countdown-box .big-number {\n      font-size: 48px;\n      font-weight: bold;\n      color: #92400e;\n      margin: 10px 0;\n    }\n    .countdown-box .label {\n      font-size: 18px;\n      color: #78350f;\n    }\n    .details-box {\n      background: #f8fafc;\n      border-left: 4px solid #3b82f6;\n      padding: 25px;\n      margin: 25px 0;\n      border-radius: 8px;\n    }\n    .detail-row {\n      padding: 10px 0;\n      border-bottom: 1px solid #e2e8f0;\n    }\n    .detail-row:last-child {\n      border-bottom: none;\n    }\n    .detail-label {\n      font-weight: 600;\n      color: #64748b;\n      margin-bottom: 4px;\n    }\n    .detail-value {\n      color: #0f172a;\n      font-size: 16px;\n    }\n    .checklist {\n      background: #dbeafe;\n      border-left: 4px solid #3b82f6;\n      padding: 20px;\n      margin: 25px 0;\n      border-radius: 8px;\n    }\n    .checklist h4 {\n      margin: 0 0 15px 0;\n      color: #1e3a8a;\n    }\n    .checklist ul {\n      margin: 0;\n      padding-left: 20px;\n    }\n    .checklist li {\n      margin: 8px 0;\n      color: #1e40af;\n    }\n    .button-container {\n      text-align: center;\n      margin: 30px 0;\n    }\n    .button {\n      display: inline-block;\n      padding: 14px 32px;\n      background: #f59e0b;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: 600;\n      font-size: 16px;\n      margin: 5px;\n    }\n    .button-secondary {\n      background: #64748b;\n    }\n    .footer {\n      background: #f8fafc;\n      padding: 30px;\n      text-align: center;\n      border-top: 1px solid #e2e8f0;\n    }\n    .footer p {\n      margin: 8px 0;\n      color: #64748b;\n      font-size: 14px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <div class=\"icon\">⏰</div>\n      <h1>Rappel : C'est bientôt !</h1>\n    </div>\n    \n    <div class=\"content\">\n      <p style=\"font-size: 18px; color: #1e3a8a;\">\n        Bonjour <strong>{{ $json.customerName }}</strong>,\n      </p>\n      \n      <p>\n        Votre session de coaching golf approche ! Nous avons hâte de vous voir sur le green.\n      </p>\n      \n      <div class=\"countdown-box\">\n        <div class=\"label\">Votre session commence dans</div>\n        <div class=\"big-number\">{{ $json.hoursUntil }}h</div>\n      </div>\n      \n      <div class=\"details-box\">\n        <div class=\"detail-row\">\n          <div class=\"detail-label\">📅 Date</div>\n          <div class=\"detail-value\">{{ $json.formattedDate }}</div>\n        </div>\n        \n        <div class=\"detail-row\">\n          <div class=\"detail-label\">⏰ Horaire</div>\n          <div class=\"detail-value\">{{ $json.timeSlot }}</div>\n        </div>\n        \n        <div class=\"detail-row\">\n          <div class=\"detail-label\">⏱️ Durée</div>\n          <div class=\"detail-value\">{{ $json.duration }} minutes</div>\n        </div>\n        \n        <div class=\"detail-row\">\n          <div class=\"detail-label\">🏌️ Coach</div>\n          <div class=\"detail-value\">{{ $json.coachName || 'Coach Golf Pro' }}</div>\n        </div>\n        \n        <div class=\"detail-row\">\n          <div class=\"detail-label\">📍 Lieu</div>\n          <div class=\"detail-value\">{{ $json.location || 'Golf Indoor Center' }}<br>\n          <small style=\"color: #64748b;\">{{ $json.locationAddress || '123 Avenue du Golf, 75000 Paris' }}</small></div>\n        </div>\n      </div>\n      \n      <div class=\"checklist\">\n        <h4>✅ N'oubliez pas d'apporter :</h4>\n        <ul>\n          <li>Vos clubs de golf</li>\n          <li>Une tenue confortable</li>\n          <li>Des chaussures adaptées</li>\n          <li>Une bouteille d'eau</li>\n          <li>Protection solaire</li>\n        </ul>\n      </div>\n      \n      <div class=\"button-container\">\n        <a href=\"https://www.google.com/maps/search/?api=1&query={{ $json.locationAddress || '123+Avenue+du+Golf+75000+Paris' }}\" class=\"button\" target=\"_blank\">\n          🗺️ Itinéraire\n        </a>\n        <a href=\"mailto:contact@golfcoach.com?subject=Réservation {{ $json.id }}\" class=\"button button-secondary\">\n          📧 Nous contacter\n        </a>\n      </div>\n      \n      <p style=\"margin-top: 30px; font-size: 14px; color: #64748b;\">\n        💡 <strong>Conseil :</strong> Arrivez 10-15 minutes en avance pour vous échauffer tranquillement.\n      </p>\n      \n      <p style=\"margin-top: 20px;\">\n        À très bientôt ! 🏌️‍♂️\n      </p>\n      \n      <p style=\"color: #64748b; margin-top: 20px;\">\n        Sportivement,<br>\n        <strong style=\"color: #1e3a8a;\">L'équipe {{ $json.coachName || 'Coach Golf Pro' }}</strong>\n      </p>\n    </div>\n    \n    <div class=\"footer\">\n      <p style=\"font-size: 12px; color: #94a3b8;\">\n        Réservation #{{ $json.id }}\n      </p>\n      <p>\n        Besoin de modifier ou annuler ?<br>\n        📧 contact@golfcoach.com | 📞 +33 1 23 45 67 89\n      </p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "b9a0ded7-9928-4522-8735-a03015f20af6",
+      "name": "Envoyer Email Rappel",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        192,
+        -48
+      ],
+      "webhookId": "fbc36878-7ba1-4397-9dcf-171531d8a69e"
+    },
+    {
+      "parameters": {
+        "url": "=https://golfcoachreservation-production.up.railway.app/api/bookings/{{ $json.id }}/reminder-sent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "local-n8n-api-key"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "reminderSent",
+              "value": true
+            },
+            {
+              "name": "reminderSentAt",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a7272cc-929c-4cf5-9c3c-b819fee9b6e6",
+      "name": "Marquer Rappel Envoyé",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        384,
+        -48
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "83d6e244-b25a-4297-b46f-f1d928faafad",
+      "name": "Aucune Réservation",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        112
+      ]
+    }
+  ],
+  "connections": {
+    "Vérifier toutes les 6h": {
+      "main": [
+        [
+          {
+            "node": "Récupérer Réservations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Récupérer Réservations": {
+      "main": [
+        [
+          {
+            "node": "Filtrer Réservations 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrer Réservations 24h": {
+      "main": [
+        [
+          {
+            "node": "A des réservations ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A des réservations ?": {
+      "main": [
+        [
+          {
+            "node": "Formater Données Rappel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aucune Réservation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formater Données Rappel": {
+      "main": [
+        [
+          {
+            "node": "Envoyer Email Rappel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Envoyer Email Rappel": {
+      "main": [
+        [
+          {
+            "node": "Marquer Rappel Envoyé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ca65aab8-8d58-4af0-a1b0-7676c94a8338",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-01T19:34:27.881Z",
+      "createdAt": "2025-11-01T19:34:27.881Z",
+      "role": "workflow:owner",
+      "workflowId": "ypvVcRdOiiQCjTp7",
+      "projectId": "MNN6I3Aq8chOdsCX"
+    }
+  ],
+  "tags": []
+}
